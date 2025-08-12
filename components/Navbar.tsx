@@ -19,7 +19,7 @@ const Navbar = () => {
     >
       <div className="flex justify-between ">
         <div>
-          <h1 className="font-bold text-2xl">SoundWave</h1>
+          <h1 className="font-bold text-2xl text-black">SoundWave</h1>
         </div>
 
         <div className="hidden gap-5 items-center sm:flex">
@@ -146,6 +146,7 @@ const Navbar = () => {
       >
         <div className="py-5 flex flex-col gap-5 items-center">
           <Link
+            onClick={() => setToggleBurger(false)}
             className={`${
               pathname === "/" ? "text-gray-800" : "text-gray-400"
             }`}
@@ -154,6 +155,7 @@ const Navbar = () => {
             Home
           </Link>
           <Link
+            onClick={() => setToggleBurger(false)}
             className={`${
               pathname === "/products" ? "text-gray-800" : "text-gray-400"
             }`}
@@ -162,6 +164,7 @@ const Navbar = () => {
             Products
           </Link>
           <Link
+            onClick={() => setToggleBurger(false)}
             className={`${
               pathname === "/deals" ? "text-gray-800" : "text-gray-400"
             }`}
@@ -170,6 +173,7 @@ const Navbar = () => {
             Deals
           </Link>
           <Link
+            onClick={() => setToggleBurger(false)}
             className={`${
               pathname === "/support" ? "text-gray-800" : "text-gray-400"
             }`}

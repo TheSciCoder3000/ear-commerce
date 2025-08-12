@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import ProductItem from "@/components/ProductItem";
 import Image from "next/image";
 
@@ -52,7 +53,7 @@ const dummyCategories = [
 
 export default function Home() {
   return (
-    <div>
+    <div className="mt-17">
       {/* Hero Section */}
       <div className="flex flex-col h-[100vh] md:flex-row md:h-[80vh]">
         <div className="px-6 py-10 h-fit bg-[#111827] text-white md:h-full">

@@ -52,18 +52,18 @@ export const dummyCategories: CategoryData[] = [
     name: "Gaming",
     description:
       "Designed for immersive gameplay with crystal-clear communication",
-    link: "",
+    link: "/products?category=Gaming",
   },
   {
     id: Categories.Wireless,
     name: "Wireless",
     description: "DFreedom to move with premium sound quality",
-    link: "",
+    link: "/products?category=Wireless",
   },
   {
     id: Categories.Professional,
     name: "Professional",
     description: "Studio-quality sound for professionals and audiophiles",
-    link: "",
+    link: "/products?category=Professional",
   },
 ];

@@ -1,54 +1,6 @@
 import ProductItem from "@/components/ProductItem";
+import { dummyCategories, dummyData } from "@/Constants";
 import Image from "next/image";
-
-const dummyData = [
-  {
-    id: 0,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-  {
-    id: 1,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-  {
-    id: 2,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-  {
-    id: 3,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-];
-
-const dummyCategories = [
-  {
-    id: 0,
-    name: "Gaming",
-    description:
-      "Designed for immersive gameplay with crystal-clear communication",
-    link: "",
-  },
-  {
-    id: 1,
-    name: "Wireless",
-    description: "DFreedom to move with premium sound quality",
-    link: "",
-  },
-  {
-    id: 2,
-    name: "Professional",
-    description: "Studio-quality sound for professionals and audiophiles",
-    link: "",
-  },
-];
 
 export default function Home() {
   return (

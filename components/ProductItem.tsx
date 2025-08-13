@@ -1,21 +1,8 @@
 "use client";
 
+import { Categories, CategoryData, ProductData } from "@/Constants";
 import Link from "next/link";
 import React from "react";
-
-interface ProductData {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-}
-
-interface ProductCategories {
-  id: number;
-  name: string;
-  description: string;
-  link: string;
-}
 
 type ProductProps =
   | {
@@ -23,7 +10,7 @@ type ProductProps =
       isCategory: false;
     }
   | {
-      prod: ProductCategories;
+      prod: CategoryData;
       isCategory: true;
     };
 
@@ -36,7 +23,7 @@ const ProductItem: React.FC<ProductProps> = ({ prod, isCategory }) => {
           {prod.name}
         </h2>
         <p className="text-xs text-gray-500">
-          {isCategory ? prod.description : prod.category}
+          {isCategory ? prod.description : Categories[prod.category]}
         </p>
         <div className="flex justify-between items-end">
           {isCategory ? (

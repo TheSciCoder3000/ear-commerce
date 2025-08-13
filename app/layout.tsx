@@ -1,19 +1,3 @@
-import type { Metadata, Viewport } from "next";
-import "./globals.css";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-
-export const metadata: Metadata = {
-  title: "SoundWave | Earcommerce",
-  description: "We offer the best portable audio devices in town",
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  // You can add other properties like minimumScale, maximumScale, userScalable
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,12 +5,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>
-        <Navbar />
-        {children}
-
-        <Footer />
-      </body>
+      <body className={`antialiased`}>{children}</body>
     </html>
   );
 }

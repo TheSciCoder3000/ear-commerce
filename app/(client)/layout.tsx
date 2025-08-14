@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "SoundWave | Earcommerce",
@@ -20,11 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <ClerkProvider>
       <Navbar />
       {children}
 
       <Footer />
-    </>
+    </ClerkProvider>
   );
 }

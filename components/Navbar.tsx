@@ -4,10 +4,13 @@ import React, { useState } from "react";
 import useNavbarScroll from "./hooks/useNavbarScroll";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ClerkLoaded, useUser } from "@clerk/nextjs";
+import { SignedIn, SignInButton, UserButton } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const [isVisible] = useNavbarScroll();
   const [toggleBurger, setToggleBurger] = useState(false);
+  const currentUser = useUser();
 
   const pathname = usePathname();
 
@@ -101,6 +104,17 @@ const Navbar = () => {
               </defs>
             </svg>
           </button>
+
+          <ClerkLoaded>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            {!currentUser.user && (
+              <SignInButton>
+                <button>Sign In</button>
+              </SignInButton>
+            )}
+          </ClerkLoaded>
 
           <button
             className="block sm:hidden"

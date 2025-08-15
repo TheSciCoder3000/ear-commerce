@@ -21,7 +21,17 @@ const Page = () => {
   }, []);
 
   if (!session) {
-    return <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />;
+    return (
+      <div className="mt-30 mb-10 flex justify-center">
+        <div className="max-w-80 w-full px-3">
+          <Auth
+            providers={["google"]}
+            supabaseClient={supabase}
+            appearance={{ theme: ThemeSupa }}
+          />
+        </div>
+      </div>
+    );
   } else {
     return <div>Logged in!</div>;
   }

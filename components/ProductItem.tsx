@@ -19,14 +19,16 @@ const ProductItem: React.FC<ProductProps> = ({ prod, isCategory }) => {
   return (
     <div key={prod.id} className="rounded-md drop-shadow-md flex flex-col">
       <div className="relative bg-gray-400 h-[18rem] overflow-hidden rounded-t-lg">
-        <Image
-          src={isCategory ? prod.cover : prod.image_paths[0]}
-          alt="item-cover"
-          height={0}
-          width={0}
-          sizes="100vw"
-          className="absolute top-0 left-0 w-full h-full object-cover"
-        />
+        {(isCategory ? !!prod.cover : !!prod.image_paths[0]) && (
+          <Image
+            src={isCategory ? prod.cover : prod.image_paths[0]}
+            alt="item-cover"
+            height={0}
+            width={0}
+            sizes="100vw"
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
+        )}
       </div>
       <div className="p-4 h-max bg-white rounded-b-lg flex-1">
         <h2 className={`mb-2 font-${isCategory ? "bold" : "regular"}`}>

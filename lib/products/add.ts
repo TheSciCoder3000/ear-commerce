@@ -6,7 +6,7 @@ export function ParseFormData(formData: FormData) {
     price: parseFloat(formData.get("price") as string),
     stock: parseInt(formData.get("stock") as string),
     category: formData.get("category") as string,
-    description: formData.get("description"),
+    description: formData.get("description") as string,
     images: formData.getAll("images[]") as File[],
   };
 }

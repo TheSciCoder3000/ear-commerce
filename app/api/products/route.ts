@@ -1,6 +1,17 @@
 import { ParseFormData, UploadImages } from "@/lib/products/add";
 import { createClient } from "@/lib/supabase/client";
 
+interface SupabaseProductTable {
+  id?: string;
+  name: string;
+  price: number;
+  description: string;
+  stock: number;
+  category_id: string;
+  user_id: string;
+  image_paths: string[];
+}
+
 export async function POST(request: Request) {
   const rawData = await request.formData();
   const user_id = rawData.get("user_id") as string;
@@ -23,7 +34,7 @@ export async function POST(request: Request) {
       supabase
     );
 
-    const { error } = await supabase.from("product").insert({
+    const InsertData: SupabaseProductTable = {
       name: data.title,
       price: data.price,
       description: data.description,
@@ -31,7 +42,9 @@ export async function POST(request: Request) {
       category_id: data.category,
       user_id,
       image_paths: imagePaths,
-    });
+    };
+
+    const { error } = await supabase.from("product").insert(InsertData);
 
     if (error) {
       console.error(error);
@@ -50,4 +63,36 @@ export async function POST(request: Request) {
 
   // supabase.storage.from("products").upload(``)
   return Response.json({ message: "success" }, { status: 200 });
+}
+
+export async function GET() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("product")
+    .select<`*, category (id, name, description)`, SupabaseProductTable>(
+      `*, category (id, name, description)`
+    );
+
+  if (error)
+    return Response.json({ message: "Supabase fetch error" }, { status: 500 });
+
+  const parsed: SupabaseProductTable[] = [];
+  for (let t = 0; t < data.length; t++) {
+    const { image_paths } = data[t];
+    const urls: string[] = [];
+    for (let i = 0; i < image_paths.length; i++) {
+      console.log(image_paths[i]);
+      const { data } = await supabase.storage
+        .from("products")
+        .getPublicUrl(image_paths[i]?.replace("products", ""));
+      urls.push(data.publicUrl);
+    }
+
+    parsed.push({
+      ...data[t],
+      image_paths: urls,
+    });
+  }
+  return Response.json({ data: parsed }, { status: 200 });
 }

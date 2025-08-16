@@ -1,27 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
-import { Categories } from "@/Constants";
+import { CategoryData } from "@/Constants";
 
 interface CategoryFilterProps {
   defaultFilter?: string;
-  setCategory?: (category: Categories | undefined) => void;
+  setCategory?: (category: string | undefined) => void;
 }
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({
   defaultFilter,
   setCategory,
 }) => {
+  const [categories, setCategories] = useState<CategoryData[]>([]);
   const valueChangeHandler = (value: string) => {
-    const cat: Categories | undefined =
-      Categories[value as keyof typeof Categories];
-    if (setCategory) setCategory(cat);
+    if (setCategory) setCategory(value);
   };
+
+  useEffect(() => {
+    fetch("/api/category")
+      .then((res) => res.json())
+      .then((jsonRes) => setCategories(jsonRes.data));
+  }, []);
 
   return (
     <RadioGroup
       defaultValue={
-        Object.values(Categories).includes(defaultFilter as string)
+        categories.map((cat) => cat.name).includes(defaultFilter as string)
           ? defaultFilter
           : "All"
       }
@@ -33,13 +38,13 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           All
         </Label>
       </div>
-      {Object.keys(Categories)
+      {categories
         .filter((key) => isNaN(Number(key)))
         .map((cat) => (
-          <div key={cat} className="flex items-center gap-3">
-            <RadioGroupItem value={cat} id={cat} />
-            <Label className="text-xs font-light" htmlFor={cat}>
-              {cat}
+          <div key={cat.id} className="flex items-center gap-3">
+            <RadioGroupItem value={cat.id ?? ""} id={cat.name} />
+            <Label className="text-xs font-light" htmlFor={cat.name}>
+              {cat.name}
             </Label>
           </div>
         ))}

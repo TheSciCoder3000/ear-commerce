@@ -3,8 +3,8 @@
 import CategoryFilter from "@/components/CategoryFilter";
 import PriceRangeSelector from "@/components/PriceRangeSelector";
 import ProductItem from "@/components/ProductItem";
-import { Categories, dummyData } from "@/Constants";
-import React, { use, useState } from "react";
+import { ProductData } from "@/Constants";
+import React, { use, useEffect, useState } from "react";
 
 function ProductsPage({
   searchParams,
@@ -13,10 +13,14 @@ function ProductsPage({
 }) {
   const filters = use(searchParams).category as string | undefined;
   const [minMax, setMinMax] = useState([0, 300]);
-  const [category, setCategory] = useState<Categories | undefined>(
-    Categories[filters as keyof typeof Categories]
-  );
+  const [category, setCategory] = useState<string | undefined>("All");
+  const [products, setProducts] = useState<ProductData[]>([]);
 
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((jsonData: { data: ProductData[] }) => setProducts(jsonData.data));
+  }, []);
   return (
     <div className="my-25 px-10">
       <div className="flex justify-between items-center">
@@ -44,12 +48,12 @@ function ProductsPage({
         </div>
 
         <div className="flex-1 grid gap-5 grid-cols-1 mb-20 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {dummyData
+          {products
             .filter(
               (prod) => prod.price >= minMax[0] && prod.price <= minMax[1]
             )
             .filter(
-              (prod) => category === undefined || prod.category === category
+              (prod) => category === "All" || prod.category.id === category
             )
             .map((prod) => (
               <ProductItem key={prod.id} isCategory={false} prod={prod} />

@@ -7,13 +7,14 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Avatar } from "./ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
+import { useClickOutside } from "./hooks/useClickOutside";
 
 const buttonStyle = "px-3 py-1 hover:bg-gray-100";
 
 const NavbarProfile = () => {
   const supabase = createClient();
   const [session, setSession] = useState<Session | null>(null);
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu, ref] = useClickOutside();
 
   useEffect(() => {
     const {
@@ -27,7 +28,7 @@ const NavbarProfile = () => {
 
   if (session)
     return (
-      <div className="relative">
+      <div ref={ref} className="relative">
         <Avatar
           className="flex items-center justify-center border-2 border-yellow-500 cursor-pointer"
           onClick={() => setShowMenu((state) => !state)}

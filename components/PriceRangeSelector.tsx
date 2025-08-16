@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
 
@@ -17,6 +17,7 @@ const PriceRangeSelector: React.FC<PriceRangeProps> = ({
 }) => {
   const [minPrice, setMinPrice] = useState(min);
   const [maxPrice, setMaxPrice] = useState(max);
+  const maxRef = useRef(max);
 
   useEffect(() => {
     if (onValueChange) onValueChange([minPrice, maxPrice]);
@@ -32,7 +33,7 @@ const PriceRangeSelector: React.FC<PriceRangeProps> = ({
           defaultValue={[min]}
           onValueChange={(val) => setMinPrice(val[0])}
           min={0}
-          max={300}
+          max={maxRef.current}
         />
       </div>
       <div>
@@ -43,7 +44,7 @@ const PriceRangeSelector: React.FC<PriceRangeProps> = ({
           defaultValue={[max]}
           onValueChange={(val) => setMaxPrice(val[0])}
           min={0}
-          max={300}
+          max={maxRef.current}
         />
       </div>
     </div>

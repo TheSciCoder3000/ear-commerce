@@ -12,7 +12,7 @@ function ProductsPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const filters = use(searchParams).category as string | undefined;
-  const [minMax, setMinMax] = useState([0, 300]);
+  const [minMax, setMinMax] = useState([0, 3000]);
   const [category, setCategory] = useState<string | undefined>("All");
   const [products, setProducts] = useState<ProductData[]>([]);
 

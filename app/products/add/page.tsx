@@ -101,7 +101,6 @@ const AddProductPage = () => {
         },
         body: formData,
       });
-      console.log(response.status);
       if (response.status === 200) router.push("/products");
     } catch (e) {
       console.error(e);

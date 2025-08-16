@@ -1,8 +1,18 @@
 import ProductItem from "@/components/ProductItem";
-import { dummyCategories, dummyData } from "@/Constants";
+import { ProductData } from "@/Constants";
+import { FetchCategories } from "@/lib/category/fetch";
+import { FetchProducts, ParseProductTable } from "@/lib/products/fetch";
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+  const products = (await FetchProducts()
+    .then(([data, error]) => {
+      if (error || !data) throw Error();
+      return data;
+    })
+    .then(ParseProductTable)) as ProductData[];
+  console.log(products);
+  const [categories] = await FetchCategories();
   return (
     <div className="mt-17">
       {/* Hero Section */}
@@ -51,7 +61,7 @@ export default function Home() {
         </p>
 
         <div className="grid mt-15 gap-8 max-w-[20rem] mx-auto sm:grid-cols-2 sm:max-w-[40rem] lg:grid-cols-4 lg:max-w-[80rem] mb-20">
-          {dummyData.map((prod) => (
+          {products.map((prod) => (
             <ProductItem key={prod.id} prod={prod} isCategory={false} />
           ))}
         </div>
@@ -69,7 +79,7 @@ export default function Home() {
           Our most popular headsets, loved by customers worldwide.
         </p>
         <div className="grid mt-15 gap-8 max-w-[20rem] mx-auto sm:grid-cols-3 sm:max-w-[60rem]">
-          {dummyCategories.map((prod) => (
+          {categories.map((prod) => (
             <ProductItem key={prod.id} prod={prod} isCategory={true} />
           ))}
         </div>

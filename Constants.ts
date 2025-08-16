@@ -8,62 +8,17 @@ export enum Categories {
 export interface ProductData {
   id: number;
   name: string;
-  category: Categories;
+  category: CategoryData;
   price: number;
+  stock: number;
+  description: string;
+  image_paths: string[];
+  user_id: string;
 }
 
 export interface CategoryData {
-  id: Categories;
+  id: string;
   name: string;
-  description: string;
-  link: string;
+  description: string | null;
+  cover: string;
 }
-
-export const dummyData: ProductData[] = [
-  {
-    id: 0,
-    name: "soundwave progaming headset",
-    category: Categories.Gaming,
-    price: 149.99,
-  },
-  {
-    id: 1,
-    name: "soundwave progaming headset",
-    category: Categories.Professional,
-    price: 149.99,
-  },
-  {
-    id: 2,
-    name: "soundwave progaming headset",
-    category: Categories.Wireless,
-    price: 149.99,
-  },
-  {
-    id: 3,
-    name: "soundwave progaming headset",
-    category: Categories.Gaming,
-    price: 149.99,
-  },
-];
-
-export const dummyCategories: CategoryData[] = [
-  {
-    id: Categories.Gaming,
-    name: "Gaming",
-    description:
-      "Designed for immersive gameplay with crystal-clear communication",
-    link: "/products?category=Gaming",
-  },
-  {
-    id: Categories.Wireless,
-    name: "Wireless",
-    description: "DFreedom to move with premium sound quality",
-    link: "/products?category=Wireless",
-  },
-  {
-    id: Categories.Professional,
-    name: "Professional",
-    description: "Studio-quality sound for professionals and audiophiles",
-    link: "/products?category=Professional",
-  },
-];

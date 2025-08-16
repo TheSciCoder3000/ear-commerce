@@ -2,6 +2,7 @@
 
 import ErrorWrapper from "@/components/ErrorWrapper";
 import InputField from "@/components/InputField";
+import InputLabel from "@/components/InputLabel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -109,19 +110,25 @@ const AddProductPage = () => {
   };
 
   return (
-    <div className="min-h-[80vh] pb-10 mt-25">
-      <div className="px-5">
-        <h1 className="text-2xl font-light mb-7">Post New Product</h1>
+    <div className="min-h-[80vh] pb-10 mt-25 mb-20 flex justify-center">
+      <div className="px-5 max-w-[60rem] w-full">
+        <h1 className="text-2xl font-light mb-7 md:text-4xl md:ml-[7.5rem]">
+          Post New Product
+        </h1>
         <form method="post" onSubmit={handleSubmit(onSubmit)}>
           <InputField>
-            <label htmlFor="title">Title:</label>
+            <InputLabel htmlFor="title" required>
+              Title:
+            </InputLabel>
             <ErrorWrapper message={errors.title?.message}>
               <Input {...register("title")} />
             </ErrorWrapper>
           </InputField>
 
           <InputField>
-            <label htmlFor="price">Price:</label>
+            <InputLabel htmlFor="price" required>
+              Price:
+            </InputLabel>
             <ErrorWrapper message={errors.price?.message}>
               <Input
                 {...register("price")}
@@ -134,7 +141,9 @@ const AddProductPage = () => {
           </InputField>
 
           <InputField>
-            <label htmlFor="stock">Stock:</label>
+            <InputLabel required htmlFor="stock">
+              Stock:
+            </InputLabel>
             <ErrorWrapper message={errors.stock?.message}>
               <Input
                 {...register("stock")}
@@ -150,7 +159,9 @@ const AddProductPage = () => {
             control={control}
             render={({ field }) => (
               <InputField>
-                <label htmlFor="category">Category:</label>
+                <InputLabel required htmlFor="category">
+                  Category:
+                </InputLabel>
                 <ErrorWrapper message={errors.category?.message}>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger>
@@ -170,14 +181,18 @@ const AddProductPage = () => {
           />
 
           <InputField>
-            <label htmlFor="description">Description:</label>
+            <InputLabel required htmlFor="description">
+              Description:
+            </InputLabel>
             <ErrorWrapper message={errors.description?.message}>
               <Textarea {...register("description")} className="h-[7rem]" />
             </ErrorWrapper>
           </InputField>
 
           <InputField>
-            <label htmlFor="images">Images:</label>
+            <InputLabel required htmlFor="images">
+              Images:
+            </InputLabel>
             <ErrorWrapper message={errors.images?.message}>
               <Input
                 {...register("images")}
@@ -188,7 +203,11 @@ const AddProductPage = () => {
             </ErrorWrapper>
           </InputField>
 
-          <Button disabled={sending} type="submit">
+          <Button
+            disabled={sending}
+            type="submit"
+            className="w-full mt-10 md:w-fit float-right"
+          >
             Submit
           </Button>
         </form>

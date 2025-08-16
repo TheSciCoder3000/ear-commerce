@@ -7,7 +7,7 @@ interface ErrorWrapperProps {
 
 const ErrorWrapper: React.FC<ErrorWrapperProps> = ({ children, message }) => {
   return (
-    <div>
+    <div className="flex-1">
       {children}
       <p className="text-red-500 text-xs">{message}</p>
     </div>

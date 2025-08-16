@@ -1,8 +1,7 @@
-import { createClient } from "@/lib/supabase/client";
+import { FetchCategories } from "@/lib/category/fetch";
 
 export async function GET() {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("category").select();
+  const [data, error] = await FetchCategories();
 
   if (error)
     return Response.json({ message: "Supabase error" }, { status: 500 });

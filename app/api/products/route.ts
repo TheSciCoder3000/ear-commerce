@@ -1,4 +1,5 @@
 import { ParseFormData, UploadImages } from "@/lib/products/add";
+import { FetchProducts, ParseProductTable } from "@/lib/products/fetch";
 import { createClient } from "@/lib/supabase/client";
 
 interface SupabaseProductTable {
@@ -22,7 +23,6 @@ export async function POST(request: Request) {
 
   try {
     const data = ParseFormData(rawData);
-    console.log({ user_id, data });
 
     const supabase = createClient(token);
 
@@ -66,33 +66,11 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  const supabase = createClient();
+  const [data, error] = await FetchProducts();
 
-  const { data, error } = await supabase
-    .from("product")
-    .select<`*, category (id, name, description)`, SupabaseProductTable>(
-      `*, category (id, name, description)`
-    );
-
-  if (error)
+  if (error || !data)
     return Response.json({ message: "Supabase fetch error" }, { status: 500 });
 
-  const parsed: SupabaseProductTable[] = [];
-  for (let t = 0; t < data.length; t++) {
-    const { image_paths } = data[t];
-    const urls: string[] = [];
-    for (let i = 0; i < image_paths.length; i++) {
-      console.log(image_paths[i]);
-      const { data } = await supabase.storage
-        .from("products")
-        .getPublicUrl(image_paths[i]?.replace("products", ""));
-      urls.push(data.publicUrl);
-    }
-
-    parsed.push({
-      ...data[t],
-      image_paths: urls,
-    });
-  }
+  const parsed = await ParseProductTable(data);
   return Response.json({ data: parsed }, { status: 200 });
 }

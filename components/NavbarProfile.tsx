@@ -39,19 +39,26 @@ const NavbarProfile = () => {
         <div
           className={`${
             showMenu ? "block" : "hidden"
-          } absolute bg-white shadow-lg right-0 rounded-md flex flex-col gap-3 overflow-hidden border-1 border-gray-100`}
+          } absolute bg-white shadow-lg right-0 rounded-md flex flex-col overflow-hidden border-1 border-gray-100`}
         >
           <Link
             onClick={() => setShowMenu(false)}
             className="w-45 px-5 py-2 text-xs hover:bg-gray-50"
-            href={"/address"}
+            href={"/user/products"}
+          >
+            Products
+          </Link>
+          <Link
+            onClick={() => setShowMenu(false)}
+            className="w-45 px-5 py-2 text-xs hover:bg-gray-50"
+            href={"/user/address"}
           >
             Addresses
           </Link>
           <Link
             onClick={() => setShowMenu(false)}
             className="w-45 px-5 py-2 text-xs hover:bg-gray-50"
-            href={"/orders"}
+            href={"/user/orders"}
           >
             Orders
           </Link>

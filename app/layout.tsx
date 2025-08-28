@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { UserProvider } from "@/components/UserContext";
 
 export const metadata: Metadata = {
   title: "SoundWave | Earcommerce",
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <Navbar />
-        {children}
+        <UserProvider>
+          <Navbar />
+          {children}
 
-        <Footer />
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   );

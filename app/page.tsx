@@ -12,8 +12,8 @@ export default async function Home() {
       return data;
     })
     .then(ParseProductTable)) as ProductData[];
-  console.log(products);
-  const [categories] = await FetchCategories();
+  const [categories, categoriesError] = await FetchCategories();
+  if (categoriesError || !categories) throw Error();
   return (
     <div className="mt-17">
       {/* Hero Section */}

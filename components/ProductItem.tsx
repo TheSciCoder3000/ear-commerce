@@ -39,7 +39,10 @@ const ProductItem: React.FC<ProductProps> = ({ prod, isCategory }) => {
         </p>
         <div className="flex justify-between items-end">
           {isCategory ? (
-            <Link className="mt-5 text-blue-700 text-xs" href={""}>
+            <Link
+              className="mt-5 text-blue-700 text-xs"
+              href={`/products?category=${prod.id}`}
+            >
               Shop Now
             </Link>
           ) : (

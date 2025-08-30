@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
@@ -24,7 +25,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
       .then((jsonRes) => {
         setCategories(jsonRes.data);
         setMounted(true);
-        if (setCategory) setCategory(defaultFilter);
+        if (setCategory) setCategory(defaultFilter ?? "All");
       });
   }, []);
 

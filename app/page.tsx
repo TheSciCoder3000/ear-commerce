@@ -1,56 +1,19 @@
 import ProductItem from "@/components/ProductItem";
+import { ProductData } from "@/Constants";
+import { FetchCategories } from "@/lib/category/fetch";
+import { FetchProducts, ParseProductTable } from "@/lib/products/fetch";
 import Image from "next/image";
+import Link from "next/link";
 
-const dummyData = [
-  {
-    id: 0,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-  {
-    id: 1,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-  {
-    id: 2,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-  {
-    id: 3,
-    name: "soundwave progaming headset",
-    category: "Gaming",
-    price: 149.99,
-  },
-];
-
-const dummyCategories = [
-  {
-    id: 0,
-    name: "Gaming",
-    description:
-      "Designed for immersive gameplay with crystal-clear communication",
-    link: "",
-  },
-  {
-    id: 1,
-    name: "Wireless",
-    description: "DFreedom to move with premium sound quality",
-    link: "",
-  },
-  {
-    id: 2,
-    name: "Professional",
-    description: "Studio-quality sound for professionals and audiophiles",
-    link: "",
-  },
-];
-
-export default function Home() {
+export default async function Home() {
+  const products = (await FetchProducts()
+    .then(([data, error]) => {
+      if (error || !data) throw Error();
+      return data;
+    })
+    .then(ParseProductTable)) as ProductData[];
+  const [categories, categoriesError] = await FetchCategories();
+  if (categoriesError || !categories) throw Error();
   return (
     <div className="mt-17">
       {/* Hero Section */}
@@ -69,9 +32,12 @@ export default function Home() {
             the perfect headset for you.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:mx-auto sm:w-fit md:mx-0">
-            <button className="px-8 py-4 rounded-sm bg-[#2563EB]">
+            <Link
+              href={"/products"}
+              className="px-8 cursor-pointer hover:bg-[#2563EB]/80 py-4 rounded-sm bg-[#2563EB]"
+            >
               Shop Now
-            </button>
+            </Link>
             <button className="px-8 py-4 rounded-sm bg-white text-[#2563EB]">
               View Featured
             </button>
@@ -99,7 +65,7 @@ export default function Home() {
         </p>
 
         <div className="grid mt-15 gap-8 max-w-[20rem] mx-auto sm:grid-cols-2 sm:max-w-[40rem] lg:grid-cols-4 lg:max-w-[80rem] mb-20">
-          {dummyData.map((prod) => (
+          {products.map((prod) => (
             <ProductItem key={prod.id} prod={prod} isCategory={false} />
           ))}
         </div>
@@ -117,9 +83,11 @@ export default function Home() {
           Our most popular headsets, loved by customers worldwide.
         </p>
         <div className="grid mt-15 gap-8 max-w-[20rem] mx-auto sm:grid-cols-3 sm:max-w-[60rem]">
-          {dummyCategories.map((prod) => (
-            <ProductItem key={prod.id} prod={prod} isCategory={true} />
-          ))}
+          {categories
+            .filter((item, indx) => indx < 3)
+            .map((prod) => (
+              <ProductItem key={prod.id} prod={prod} isCategory={true} />
+            ))}
         </div>
       </div>
     </div>

@@ -1,21 +1,9 @@
 "use client";
 
+import { CategoryData, ProductData } from "@/Constants";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-
-interface ProductData {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-}
-
-interface ProductCategories {
-  id: number;
-  name: string;
-  description: string;
-  link: string;
-}
 
 type ProductProps =
   | {
@@ -23,24 +11,38 @@ type ProductProps =
       isCategory: false;
     }
   | {
-      prod: ProductCategories;
+      prod: CategoryData;
       isCategory: true;
     };
 
 const ProductItem: React.FC<ProductProps> = ({ prod, isCategory }) => {
   return (
     <div key={prod.id} className="rounded-md drop-shadow-md flex flex-col">
-      <div className="relative bg-gray-400 h-[18rem] overflow-hidden rounded-t-lg"></div>
+      <div className="relative bg-gray-400 h-[18rem] overflow-hidden rounded-t-lg">
+        {(isCategory ? !!prod.cover : !!prod.image_paths[0]) && (
+          <Image
+            src={isCategory ? prod.cover : prod.image_paths[0]}
+            alt="item-cover"
+            height={0}
+            width={0}
+            sizes="100vw"
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
+        )}
+      </div>
       <div className="p-4 h-max bg-white rounded-b-lg flex-1">
         <h2 className={`mb-2 font-${isCategory ? "bold" : "regular"}`}>
           {prod.name}
         </h2>
         <p className="text-xs text-gray-500">
-          {isCategory ? prod.description : prod.category}
+          {isCategory ? prod.description : prod.category.name}
         </p>
         <div className="flex justify-between items-end">
           {isCategory ? (
-            <Link className="mt-5 text-blue-700 text-xs" href={prod.link}>
+            <Link
+              className="mt-5 text-blue-700 text-xs"
+              href={`/products?category=${prod.id}`}
+            >
               Shop Now
             </Link>
           ) : (

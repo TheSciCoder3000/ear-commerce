@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import useNavbarScroll from "./hooks/useNavbarScroll";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import NavbarProfile from "./NavbarProfile";
 
 const Navbar = () => {
   const [isVisible] = useNavbarScroll();
@@ -57,7 +58,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="flex gap-5">
+        <div className="flex items-center gap-5">
           <button className="flex items-center justify-center p-1 cursor-pointer">
             <svg
               width="21"
@@ -101,6 +102,8 @@ const Navbar = () => {
               </defs>
             </svg>
           </button>
+
+          <NavbarProfile />
 
           <button
             className="block sm:hidden"

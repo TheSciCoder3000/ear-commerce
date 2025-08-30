@@ -3,6 +3,7 @@ import { ProductData } from "@/Constants";
 import { FetchCategories } from "@/lib/category/fetch";
 import { FetchProducts, ParseProductTable } from "@/lib/products/fetch";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Home() {
   const products = (await FetchProducts()
@@ -31,9 +32,12 @@ export default async function Home() {
             the perfect headset for you.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:mx-auto sm:w-fit md:mx-0">
-            <button className="px-8 py-4 rounded-sm bg-[#2563EB]">
+            <Link
+              href={"/products"}
+              className="px-8 cursor-pointer hover:bg-[#2563EB]/80 py-4 rounded-sm bg-[#2563EB]"
+            >
               Shop Now
-            </button>
+            </Link>
             <button className="px-8 py-4 rounded-sm bg-white text-[#2563EB]">
               View Featured
             </button>
@@ -79,9 +83,11 @@ export default async function Home() {
           Our most popular headsets, loved by customers worldwide.
         </p>
         <div className="grid mt-15 gap-8 max-w-[20rem] mx-auto sm:grid-cols-3 sm:max-w-[60rem]">
-          {categories.map((prod) => (
-            <ProductItem key={prod.id} prod={prod} isCategory={true} />
-          ))}
+          {categories
+            .filter((item, indx) => indx < 3)
+            .map((prod) => (
+              <ProductItem key={prod.id} prod={prod} isCategory={true} />
+            ))}
         </div>
       </div>
     </div>

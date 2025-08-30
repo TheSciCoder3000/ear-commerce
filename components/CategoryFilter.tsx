@@ -15,7 +15,6 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   const [mounted, setMounted] = useState(false);
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const valueChangeHandler = (value: string) => {
-    console.log("setting category");
     if (setCategory) setCategory(value);
   };
 
@@ -50,7 +49,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           .map((cat) => (
             <div key={cat.id} className="flex items-center gap-3">
               <RadioGroupItem value={cat.id} id={cat.id} />
-              <Label className="text-xs font-light" htmlFor={cat.name}>
+              <Label className="text-xs font-light" htmlFor={cat.id}>
                 {cat.name}
               </Label>
             </div>

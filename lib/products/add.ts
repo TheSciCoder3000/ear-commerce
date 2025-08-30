@@ -23,7 +23,7 @@ export async function UploadImages(
     const storageData = await supabase.storage
       .from("products")
       .upload(
-        `${user_id}/product_images/${product_name}-${new Date().toString()}-${
+        `${user_id}/product_images/${product_name}-${new Date().toISOString()}-${
           img.name
         }`,
         img

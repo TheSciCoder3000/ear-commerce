@@ -1,3 +1,4 @@
+import CategoryItem from "@/components/CategoryItem";
 import ProductItem from "@/components/ProductItem";
 import { ProductData } from "@/Constants";
 import { FetchCategories } from "@/lib/category/fetch";
@@ -86,7 +87,7 @@ export default async function Home() {
           {categories
             .filter((item, indx) => indx < 3)
             .map((prod) => (
-              <ProductItem key={prod.id} prod={prod} isCategory={true} />
+              <CategoryItem key={prod.id} cat={prod} />
             ))}
         </div>
       </div>

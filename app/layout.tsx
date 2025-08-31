@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { UserProvider } from "@/components/UserContext";
+import StoreProvider from "@/store/StoreProvider";
 
 export const metadata: Metadata = {
   title: "SoundWave | Earcommerce",
@@ -23,12 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <UserProvider>
-          <Navbar />
-          {children}
+        <StoreProvider>
+          <UserProvider>
+            <Navbar />
+            {children}
 
-          <Footer />
-        </UserProvider>
+            <Footer />
+          </UserProvider>
+        </StoreProvider>
       </body>
     </html>
   );

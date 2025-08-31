@@ -5,10 +5,12 @@ import useNavbarScroll from "./hooks/useNavbarScroll";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavbarProfile from "./NavbarProfile";
+import { useTotalCart } from "@/store/hooks";
 
 const Navbar = () => {
   const [isVisible] = useNavbarScroll();
   const [toggleBurger, setToggleBurger] = useState(false);
+  const totalCart = useTotalCart();
 
   const pathname = usePathname();
 
@@ -59,7 +61,15 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-5">
-          <button className="flex items-center justify-center p-1 cursor-pointer">
+          <Link
+            href={"/cart"}
+            className="relative flex items-center justify-center p-1 cursor-pointer"
+          >
+            {totalCart > 0 && (
+              <div className="absolute flex items-center justify-center top-0 -right-[40%] bg-red-600 text-white text-[0.7em] rounded-full w-4.5 h-4.5">
+                {totalCart}
+              </div>
+            )}
             <svg
               width="21"
               height="21"
@@ -101,7 +111,7 @@ const Navbar = () => {
                 </clipPath>
               </defs>
             </svg>
-          </button>
+          </Link>
 
           <NavbarProfile />
 

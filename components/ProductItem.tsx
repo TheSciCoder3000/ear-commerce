@@ -2,7 +2,7 @@
 
 import { ProductData } from "@/Constants";
 import { add, remove } from "@/store/cart/cartSlice";
-import { useCart } from "@/store/hooks";
+import { useSelectCart } from "@/store/hooks";
 import Image from "next/image";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -14,7 +14,7 @@ type ProductProps = {
 };
 
 const ProductItem: React.FC<ProductProps> = ({ prod }) => {
-  const cart = useCart();
+  const cart = useSelectCart(prod.id);
   const dispath = useDispatch();
 
   const handleAddToCart = () => {
@@ -43,8 +43,9 @@ const ProductItem: React.FC<ProductProps> = ({ prod }) => {
         <div className="flex justify-between items-end">
           <>
             <h2 className="font-bold">${prod.price}</h2>
-            {cart.find((item) => item.id === prod.id) ? (
+            {cart ? (
               <NumebrPicker
+                defaultValue={cart.count}
                 onIncrement={handleAddToCart}
                 onDecrement={handleMinusToCart}
               />

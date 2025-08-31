@@ -7,13 +7,15 @@ interface NumberPickerProps {
   onValueChange?: (value: number) => void;
   onIncrement?: () => void;
   onDecrement?: () => void;
+  defaultValue?: number;
 }
 const NumebrPicker: React.FC<NumberPickerProps> = ({
   onValueChange,
   onIncrement,
   onDecrement,
+  defaultValue,
 }) => {
-  const [value, setvalue] = useState(1);
+  const [value, setvalue] = useState(defaultValue || 0);
 
   useEffect(() => {
     if (onValueChange) onValueChange(value);

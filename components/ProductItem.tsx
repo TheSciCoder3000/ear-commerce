@@ -6,7 +6,7 @@ import React from "react";
 import NumebrPicker from "./ui/NumebrPicker";
 import { useUser } from "./hooks/useUser";
 import { useRouter } from "next/navigation";
-import { addCart } from "@/store/cart/CartAsyncThunk";
+import { addCart, removeCart } from "@/store/cart/CartAsyncThunk";
 
 type ProductProps = {
   prod: IProduct;
@@ -25,7 +25,7 @@ const ProductItem: React.FC<ProductProps> = ({ prod }) => {
   };
 
   const handleMinusToCart = () => {
-    // dispath(remove(prod.id));
+    dispath(removeCart(prod));
   };
 
   return (

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import { addCart, fetchCart } from "./CartAsyncThunk";
+import { addCart, fetchCart, removeCart } from "./CartAsyncThunk";
 
 interface CartSlice {
   cart: ICartResponse[];
@@ -54,6 +54,29 @@ export const cartSlice = createSlice({
           existing.count += 1; // overwrite
         } else {
           state.cart.push(action.payload);
+        }
+      })
+      .addCase(removeCart.pending, (state) => {
+        state.status = "pending";
+        state.error = null;
+      })
+      .addCase(removeCart.rejected, (state) => {
+        state.status = "failed";
+        state.error = "error";
+      })
+      .addCase(removeCart.fulfilled, (state, action) => {
+        state.status = "success";
+        state.error = null;
+
+        const { method, data, productId } = action.payload;
+
+        if (method === "decrement") {
+          const existing = state.cart.find((item) => item.id === data.id);
+          if (existing) existing.count -= 1; // overwrite
+        } else {
+          state.cart = state.cart.filter(
+            (item) => item.product.id != productId
+          );
         }
       });
   },

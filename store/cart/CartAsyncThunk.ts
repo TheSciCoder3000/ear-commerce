@@ -39,3 +39,41 @@ export const addCart = createAsyncThunk(
     return (await response.json()) as ICartResponse;
   }
 );
+
+type RemoveCartType =
+  | {
+      method: "decrement";
+      data: ICartResponse;
+    }
+  | {
+      method: "remove";
+      data: null;
+    };
+
+export const removeCart = createAsyncThunk(
+  "cart/removeCart",
+  async (product: IProduct) => {
+    const token = await createClient()
+      .auth.getSession()
+      .then((res) => res.data.session?.access_token);
+
+    const userId = await createClient()
+      .auth.getUser()
+      .then((res) => res.data.user?.id);
+
+    if (!userId) throw Error("no user");
+    if (!token) throw Error("invalid token");
+
+    const response = await fetch("/api/cart", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ product, userId }),
+    });
+
+    const data = (await response.json()) as RemoveCartType;
+    return { ...data, productId: product.id };
+  }
+);

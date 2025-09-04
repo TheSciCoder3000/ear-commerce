@@ -37,9 +37,11 @@ const ProductItem: React.FC<ProductProps> = ({ prod }) => {
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
       </div>
-      <div className="p-4 h-max bg-white rounded-b-lg flex-1">
-        <h2 className={`mb-2 font-regular`}>{prod.name}</h2>
-        <p className="text-xs text-gray-500">{prod.category.name}</p>
+      <div className="p-4 h-max bg-white rounded-b-lg flex-1 flex flex-col justify-between">
+        <div>
+          <h2 className={`mb-2 font-regular`}>{prod.name}</h2>
+          <p className="text-xs text-gray-500">{prod.category.name}</p>
+        </div>
         <div className="flex justify-between items-end">
           <>
             <h2 className="font-bold">${prod.price}</h2>

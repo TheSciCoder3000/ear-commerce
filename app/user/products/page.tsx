@@ -17,23 +17,6 @@ import { Plus, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-interface IProduct {
-  user_id: string;
-  id: string;
-  stock: number;
-  price: number;
-  name: string;
-  image_paths: string[];
-  description: string;
-  created_at: string;
-  category_id: string;
-  category: {
-    id: string;
-    description: string;
-    name: string;
-  };
-}
-
 const AdminProducts = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const { user } = useUser();

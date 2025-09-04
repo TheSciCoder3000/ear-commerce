@@ -1,45 +1,63 @@
-import { ProductData } from "@/Constants";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
-
-interface ExtendedProductData extends ProductData {
-  count: number;
-}
+import { addCart, fetchCart } from "./CartAsyncThunk";
 
 interface CartSlice {
-  cart: ExtendedProductData[];
+  cart: ICartResponse[];
+  status: "idle" | "pending" | "success" | "failed";
+  error: string | null;
 }
 
 const initialState: CartSlice = {
   cart: [],
+  status: "idle",
+  error: null,
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {
-    add: (state, action: PayloadAction<ProductData>) => {
-      const item = state.cart.find((item) => item.id === action.payload.id);
-      if (!item) {
-        state.cart.push({ ...action.payload, count: 1 });
-      } else {
-        Object.assign(item, { ...action.payload, count: item.count + 1 });
-      }
-    },
-    remove: (state, action: PayloadAction<string>) => {
-      const item = state.cart.find((item) => item.id === action.payload);
-      if (!item) return;
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCart.pending, (state) => {
+        state.status = "pending";
+        state.error = null;
+      })
+      .addCase(fetchCart.rejected, (state) => {
+        state.status = "failed";
+        state.error = "error";
+        state.cart = [];
+      })
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        state.status = "success";
+        state.error = null;
+        state.cart = action.payload;
+      })
+      .addCase(addCart.pending, (state) => {
+        state.status = "pending";
+        state.error = null;
+      })
+      .addCase(addCart.rejected, (state) => {
+        state.status = "failed";
+        state.error = "error";
+      })
+      .addCase(addCart.fulfilled, (state, action) => {
+        state.status = "success";
+        state.error = null;
 
-      if (item.count <= 1) {
-        state.cart = state.cart.filter((item) => item.id !== action.payload);
-      } else {
-        Object.assign(item, { ...item, count: item.count - 1 });
-      }
-    },
+        const existing = state.cart.find(
+          (item) => item.id === action.payload.id
+        );
+
+        if (existing) {
+          existing.count += 1; // overwrite
+        } else {
+          state.cart.push(action.payload);
+        }
+      });
   },
 });
-
-export const { add, remove } = cartSlice.actions;
 
 export const selectCount = (state: RootState) => state.cart.cart;
 

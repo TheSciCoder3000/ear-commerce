@@ -1,18 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useNavbarScroll from "./hooks/useNavbarScroll";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavbarProfile from "./NavbarProfile";
-import { useTotalCart } from "@/store/hooks";
+import { useAppDispatch, useTotalCart } from "@/store/hooks";
+import { useDispatch } from "react-redux";
+import { fetchCart } from "@/store/cart/CartAsyncThunk";
+import { createClient } from "@/lib/supabase/client";
 
 const Navbar = () => {
   const [isVisible] = useNavbarScroll();
   const [toggleBurger, setToggleBurger] = useState(false);
   const totalCart = useTotalCart();
 
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
+  const supabase = createClient();
+
+  const fetCartData = async () => {
+    const token = await supabase.auth
+      .getSession()
+      .then((res) => res.data.session?.access_token);
+    if (!token) return;
+    console.log(token);
+    dispatch(fetchCart(token));
+  };
+
+  useEffect(() => {
+    fetCartData();
+  }, []);
 
   return (
     <div

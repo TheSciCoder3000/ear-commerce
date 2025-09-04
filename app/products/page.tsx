@@ -16,12 +16,12 @@ function ProductsPage({
   const filters = use(searchParams).category as string | undefined;
   const [minMax, setMinMax] = useState([0, 3000]);
   const [category, setCategory] = useState<string | undefined>("All");
-  const [products, setProducts] = useState<ProductData[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   useEffect(() => {
     fetch("/api/products")
       .then((res) => res.json())
-      .then((jsonData: { data: ProductData[] }) => setProducts(jsonData.data));
+      .then((jsonData: { data: IProduct[] }) => setProducts(jsonData.data));
   }, []);
   return (
     <Provider store={store}>

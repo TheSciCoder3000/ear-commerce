@@ -1,6 +1,5 @@
 import CategoryItem from "@/components/CategoryItem";
 import ProductItem from "@/components/ProductItem";
-import { ProductData } from "@/Constants";
 import { FetchCategories } from "@/lib/category/fetch";
 import { FetchProducts, ParseProductTable } from "@/lib/products/fetch";
 import Image from "next/image";
@@ -12,7 +11,7 @@ export default async function Home() {
       if (error || !data) throw Error();
       return data;
     })
-    .then(ParseProductTable)) as ProductData[];
+    .then(ParseProductTable)) as IProduct[];
   const [categories, categoriesError] = await FetchCategories();
   if (categoriesError || !categories) throw Error();
   return (

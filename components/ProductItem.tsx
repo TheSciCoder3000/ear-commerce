@@ -1,28 +1,31 @@
 "use client";
 
-import { ProductData } from "@/Constants";
-import { add, remove } from "@/store/cart/cartSlice";
-import { useSelectCart } from "@/store/hooks";
+import { useAppDispatch, useSelectCart } from "@/store/hooks";
 import Image from "next/image";
 import React from "react";
-import { useDispatch } from "react-redux";
 import NumebrPicker from "./ui/NumebrPicker";
+import { useUser } from "./hooks/useUser";
+import { useRouter } from "next/navigation";
+import { addCart } from "@/store/cart/CartAsyncThunk";
 
 type ProductProps = {
-  prod: ProductData;
+  prod: IProduct;
   isCategory: false;
 };
 
 const ProductItem: React.FC<ProductProps> = ({ prod }) => {
   const cart = useSelectCart(prod.id);
-  const dispath = useDispatch();
+  const dispath = useAppDispatch();
+  const router = useRouter();
+  const { user } = useUser();
 
   const handleAddToCart = () => {
-    dispath(add(prod));
+    if (!user) router.push("/signin");
+    else dispath(addCart(prod));
   };
 
   const handleMinusToCart = () => {
-    dispath(remove(prod.id));
+    // dispath(remove(prod.id));
   };
 
   return (

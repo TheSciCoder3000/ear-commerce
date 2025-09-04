@@ -9,7 +9,9 @@ export const useCart = (id?: string) =>
   useAppSelector((state) => state.cart.cart);
 
 export const useSelectCart = (id: string) =>
-  useAppSelector((state) => state.cart.cart.find((item) => item.id === id));
+  useAppSelector((state) =>
+    state.cart.cart.find((item) => item.product.id === id)
+  );
 
 export const useTotalCart = () =>
   useAppSelector((state) =>

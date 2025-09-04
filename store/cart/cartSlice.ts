@@ -31,7 +31,6 @@ export const cartSlice = createSlice({
       if (!item) return;
 
       if (item.count <= 1) {
-        console.log("removing item");
         state.cart = state.cart.filter((item) => item.id !== action.payload);
       } else {
         Object.assign(item, { ...item, count: item.count - 1 });

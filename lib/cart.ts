@@ -21,7 +21,6 @@ export async function InsertCartItem(
   supabase: SupabaseClient,
   cartData: IDbCart
 ) {
-  console.log(cartData);
   const { data: fetchData } = await supabase
     .from("cart")
     .select<FetchCartQuery, ICartResponse>(FetchQuery)
@@ -57,7 +56,6 @@ export async function DeleteCartItem(
   supabase: SupabaseClient,
   cartData: IDbCart
 ) {
-  console.log(cartData);
   const { data: fetchData } = await supabase
     .from("cart")
     .select<FetchCartQuery, ICartResponse>(FetchQuery)

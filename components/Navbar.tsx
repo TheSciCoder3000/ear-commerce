@@ -23,7 +23,6 @@ const Navbar = () => {
       .getSession()
       .then((res) => res.data.session?.access_token);
     if (!token) return;
-    console.log(token);
     dispatch(fetchCart(token));
   };
 

@@ -19,17 +19,18 @@ export async function GET(request: Request) {
 interface PostData {
   product: IProduct;
   userId: string;
+  value: number;
 }
 
 export async function POST(request: Request) {
   const supabase = await getTokenizedClient(request);
-  const { product, userId } = (await request.json()) as PostData;
+  const { product, userId, value } = (await request.json()) as PostData;
 
   try {
     const cartData: IDbCart = {
       user_id: userId,
       product_id: product.id,
-      count: 1,
+      count: value,
     };
     const data = await InsertCartItem(supabase, cartData);
     return Response.json({ ...data });
@@ -46,13 +47,13 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   const supabase = await getTokenizedClient(request);
-  const { product, userId } = (await request.json()) as PostData;
+  const { product, userId, value } = (await request.json()) as PostData;
 
   try {
     const cartData: IDbCart = {
       user_id: userId,
       product_id: product.id,
-      count: 1,
+      count: value,
     };
     const data = await DeleteCartItem(supabase, cartData);
 

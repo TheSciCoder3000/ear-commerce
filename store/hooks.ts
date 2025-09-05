@@ -5,13 +5,16 @@ import type { RootState, AppDispatch } from "./index";
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 
-export const useCart = (id?: string) =>
-  useAppSelector((state) => state.cart.cart);
+export const useCart = () => useAppSelector((state) => state.cart.cart);
 
 export const useSelectCart = (id: string) =>
-  useAppSelector((state) =>
-    state.cart.cart.find((item) => item.product.id === id)
-  );
+  useAppSelector((state) => {
+    const cart = state.cart.cart.find((item) => item.product.id === id);
+    return {
+      ...state.cart,
+      cart,
+    };
+  });
 
 export const useTotalCart = () =>
   useAppSelector((state) =>

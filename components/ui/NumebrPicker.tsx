@@ -5,15 +5,17 @@ import React, { useEffect, useState } from "react";
 
 interface NumberPickerProps {
   onValueChange?: (value: number) => void;
-  onIncrement?: () => void;
-  onDecrement?: () => void;
+  onIncrement?: (value: number) => void;
+  onDecrement?: (value: number) => void;
   defaultValue?: number;
+  status: "idle" | "pending" | "success" | "failed";
 }
 const NumebrPicker: React.FC<NumberPickerProps> = ({
   onValueChange,
   onIncrement,
   onDecrement,
   defaultValue,
+  status,
 }) => {
   const [value, setvalue] = useState(defaultValue || 0);
 
@@ -22,21 +24,23 @@ const NumebrPicker: React.FC<NumberPickerProps> = ({
   }, [value, onValueChange]);
 
   const handleDecrement = () => {
+    if (onDecrement) onDecrement(value - 1);
+
     if (value === 0) setvalue(0);
     else setvalue((state) => state - 1);
-
-    if (onDecrement) onDecrement();
   };
-  const handleIncrement = () => {
-    setvalue((state) => state + 1);
 
-    if (onIncrement) onIncrement();
+  const handleIncrement = () => {
+    if (onIncrement) onIncrement(value + 1);
+
+    setvalue((state) => state + 1);
   };
 
   return (
     <div className="flex gap-1 h-[2rem]">
       <button
-        className="cursor-pointer hover:text-gray-400 px-1"
+        disabled={status === "pending"}
+        className="cursor-pointer hover:text-gray-400 px-1 disabled:cursor-none disabled:text-gray-400"
         onClick={handleDecrement}
       >
         <Minus size={15} />
@@ -48,7 +52,8 @@ const NumebrPicker: React.FC<NumberPickerProps> = ({
         className="text-center w-[3rem] border-1 border-gray-300 rounded-md"
       />
       <button
-        className="cursor-pointer hover:text-gray-400 px-1"
+        disabled={status === "pending"}
+        className="cursor-pointer hover:text-gray-400 px-1 disabled:cursor-not-allowed disabled:text-gray-400"
         onClick={handleIncrement}
       >
         <Plus size={15} />

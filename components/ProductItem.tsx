@@ -14,18 +14,18 @@ type ProductProps = {
 };
 
 const ProductItem: React.FC<ProductProps> = ({ prod }) => {
-  const cart = useSelectCart(prod.id);
+  const { cart, status } = useSelectCart(prod.id);
   const dispath = useAppDispatch();
   const router = useRouter();
   const { user } = useUser();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (value: number) => {
     if (!user) router.push("/signin");
-    else dispath(addCart(prod));
+    else dispath(addCart({ product: prod, value }));
   };
 
-  const handleMinusToCart = () => {
-    dispath(removeCart(prod));
+  const handleMinusToCart = (value: number) => {
+    dispath(removeCart({ product: prod, value }));
   };
 
   return (
@@ -50,13 +50,14 @@ const ProductItem: React.FC<ProductProps> = ({ prod }) => {
             <h2 className="font-bold">${prod.price}</h2>
             {cart ? (
               <NumebrPicker
+                status={status}
                 defaultValue={cart.count}
                 onIncrement={handleAddToCart}
                 onDecrement={handleMinusToCart}
               />
             ) : (
               <button
-                onClick={handleAddToCart}
+                onClick={() => handleAddToCart(1)}
                 className="flex items-center justify-center p-1 rounded-full cursor-pointer hover:bg-blue-600/80 bg-blue-600 w-9 h-9 text-sm"
               >
                 <svg

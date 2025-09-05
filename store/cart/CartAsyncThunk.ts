@@ -14,9 +14,14 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
+interface CartPayload {
+  product: IProduct;
+  value: number;
+}
+
 export const addCart = createAsyncThunk(
   "cart/addCart",
-  async (product: IProduct) => {
+  async ({ product, value }: CartPayload) => {
     const token = await createClient()
       .auth.getSession()
       .then((res) => res.data.session?.access_token);
@@ -34,7 +39,7 @@ export const addCart = createAsyncThunk(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ product, userId }),
+      body: JSON.stringify({ product, userId, value }),
     });
     return (await response.json()) as ICartResponse;
   }
@@ -52,7 +57,7 @@ type RemoveCartType =
 
 export const removeCart = createAsyncThunk(
   "cart/removeCart",
-  async (product: IProduct) => {
+  async ({ product, value }: CartPayload) => {
     const token = await createClient()
       .auth.getSession()
       .then((res) => res.data.session?.access_token);
@@ -70,7 +75,7 @@ export const removeCart = createAsyncThunk(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ product, userId }),
+      body: JSON.stringify({ product, userId, value }),
     });
 
     const data = (await response.json()) as RemoveCartType;

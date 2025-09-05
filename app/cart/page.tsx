@@ -58,7 +58,6 @@ interface CartItemProps {
   item: ICartResponse;
 }
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
-  console.log(item);
   return (
     <div key={item.id} className="flex gap-5 w-full">
       <Image

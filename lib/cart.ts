@@ -34,10 +34,11 @@ export async function InsertCartItem(
     .eq("product_id", cartData.product_id)
     .single();
 
+  // if fetchData exist, update item
   if (fetchData) {
     const { data: updateData, error: updateError } = await supabase
       .from("cart")
-      .update({ count: fetchData.count + 1 })
+      .update({ count: cartData.count })
       .eq("user_id", cartData.user_id)
       .eq("product_id", cartData.product_id)
       .select<FetchCartQuery, ICartResponse>(FetchQuery)
@@ -47,6 +48,7 @@ export async function InsertCartItem(
     return updateData;
   }
 
+  // else insert new data
   const { data, error } = await supabase
     .from("cart")
     .insert(cartData)
@@ -73,7 +75,7 @@ export async function DeleteCartItem(
   if (fetchData) {
     const { data: updateData, error: updateError } = await supabase
       .from("cart")
-      .update({ count: fetchData.count - 1 })
+      .update({ count: cartData.count })
       .eq("user_id", cartData.user_id)
       .eq("product_id", cartData.product_id)
       .select<FetchCartQuery, ICartResponse>(FetchQuery)

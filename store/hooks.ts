@@ -7,15 +7,14 @@ export const useAppSelector = useSelector.withTypes<RootState>();
 
 export const useCart = () => useAppSelector((state) => state.cart.cart);
 
-export const useSelectCart = (id: string) =>
-  useAppSelector((state) => {
-    const cart = state.cart.cart.find((item) => item.product.id === id);
-    return {
-      ...state.cart,
-      cart,
-    };
-  });
+export const useSelectCart = (id: string) => {
+  const { cart, status } = useAppSelector((state) => state.cart);
 
+  return {
+    status,
+    cart: cart.find((item) => item.product.id === id),
+  };
+};
 export const useTotalCart = () =>
   useAppSelector((state) =>
     state.cart.cart.reduce((state, item) => {

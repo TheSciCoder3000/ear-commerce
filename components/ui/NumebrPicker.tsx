@@ -40,7 +40,7 @@ const NumebrPicker: React.FC<NumberPickerProps> = ({
     <div className="flex gap-1 h-[2rem]">
       <button
         disabled={status === "pending"}
-        className="cursor-pointer hover:text-gray-400 px-1 disabled:cursor-none disabled:text-gray-400"
+        className="cursor-pointer hover:text-gray-400 px-1 disabled:cursor-not-allowed disabled:text-gray-400"
         onClick={handleDecrement}
       >
         <Minus size={15} />

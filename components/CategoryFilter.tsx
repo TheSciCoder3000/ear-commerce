@@ -27,6 +27,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
         setMounted(true);
         if (setCategory) setCategory(defaultFilter ?? "All");
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (mounted)

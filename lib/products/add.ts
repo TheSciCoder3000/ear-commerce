@@ -20,14 +20,12 @@ export async function UploadImages(
   const imagePaths: string[] = [];
   for (let i = 0; i < images.length; i++) {
     const img = images[i];
+    const filePath = encodeURIComponent(
+      `${product_name}-${new Date().toISOString()}-${img.name}`
+    );
     const storageData = await supabase.storage
       .from("products")
-      .upload(
-        `${user_id}/product_images/${product_name}-${new Date().toISOString()}-${
-          img.name
-        }`,
-        img
-      )
+      .upload(`${user_id}/product_images/${filePath}`, img)
       .then((res) => res.data);
     if (storageData) imagePaths.push(storageData.fullPath);
   }

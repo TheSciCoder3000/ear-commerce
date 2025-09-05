@@ -1,54 +1,64 @@
 "use client";
 
-import { CategoryData, ProductData } from "@/Constants";
+import { useAppDispatch, useSelectCart } from "@/store/hooks";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
+import NumebrPicker from "./ui/NumebrPicker";
+import { useUser } from "./hooks/useUser";
+import { useRouter } from "next/navigation";
+import { addCart, removeCart } from "@/store/cart/CartAsyncThunk";
 
-type ProductProps =
-  | {
-      prod: ProductData;
-      isCategory: false;
-    }
-  | {
-      prod: CategoryData;
-      isCategory: true;
-    };
+type ProductProps = {
+  prod: IProduct;
+  isCategory: false;
+};
 
-const ProductItem: React.FC<ProductProps> = ({ prod, isCategory }) => {
+const ProductItem: React.FC<ProductProps> = ({ prod }) => {
+  const cart = useSelectCart(prod.id);
+  const dispath = useAppDispatch();
+  const router = useRouter();
+  const { user } = useUser();
+
+  const handleAddToCart = () => {
+    if (!user) router.push("/signin");
+    else dispath(addCart(prod));
+  };
+
+  const handleMinusToCart = () => {
+    dispath(removeCart(prod));
+  };
+
   return (
     <div key={prod.id} className="rounded-md drop-shadow-md flex flex-col">
       <div className="relative bg-gray-400 h-[18rem] overflow-hidden rounded-t-lg">
-        {(isCategory ? !!prod.cover : !!prod.image_paths[0]) && (
-          <Image
-            src={isCategory ? prod.cover : prod.image_paths[0]}
-            alt="item-cover"
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="absolute top-0 left-0 w-full h-full object-cover"
-          />
-        )}
+        <Image
+          src={prod.image_paths[0]}
+          alt="item-cover"
+          height={0}
+          width={0}
+          sizes="100vw"
+          className="absolute top-0 left-0 w-full h-full object-cover"
+        />
       </div>
-      <div className="p-4 h-max bg-white rounded-b-lg flex-1">
-        <h2 className={`mb-2 font-${isCategory ? "bold" : "regular"}`}>
-          {prod.name}
-        </h2>
-        <p className="text-xs text-gray-500">
-          {isCategory ? prod.description : prod.category.name}
-        </p>
+      <div className="p-4 h-max bg-white rounded-b-lg flex-1 flex flex-col justify-between">
+        <div>
+          <h2 className={`mb-2 font-regular`}>{prod.name}</h2>
+          <p className="text-xs text-gray-500">{prod.category.name}</p>
+        </div>
         <div className="flex justify-between items-end">
-          {isCategory ? (
-            <Link
-              className="mt-5 text-blue-700 text-xs"
-              href={`/products?category=${prod.id}`}
-            >
-              Shop Now
-            </Link>
-          ) : (
-            <>
-              <h2 className="font-bold">${prod.price}</h2>
-              <button className="flex items-center justify-center p-1 rounded-full bg-blue-600 w-9 h-9 text-sm">
+          <>
+            <h2 className="font-bold">${prod.price}</h2>
+            {cart ? (
+              <NumebrPicker
+                defaultValue={cart.count}
+                onIncrement={handleAddToCart}
+                onDecrement={handleMinusToCart}
+              />
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                className="flex items-center justify-center p-1 rounded-full cursor-pointer hover:bg-blue-600/80 bg-blue-600 w-9 h-9 text-sm"
+              >
                 <svg
                   width="21"
                   height="21"
@@ -91,8 +101,8 @@ const ProductItem: React.FC<ProductProps> = ({ prod, isCategory }) => {
                   </defs>
                 </svg>
               </button>
-            </>
-          )}
+            )}
+          </>
         </div>
       </div>
     </div>

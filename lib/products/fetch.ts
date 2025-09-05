@@ -41,6 +41,21 @@ export async function FetchUserProducts(
   return [data, error];
 }
 
+export async function FetchProductByIds(
+  ids: string[]
+): Promise<SupabaseProductTable[] | null> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("product")
+    .select<`*`, SupabaseProductTable>("*")
+    .in("id", ids);
+
+  if (error) throw Error(error.message);
+
+  return data;
+}
+
 export async function ParseProductTable(data: SupabaseProductTable[]) {
   const supabase = createClient();
 

@@ -20,19 +20,19 @@ const CartPage = () => {
               <div key={item.id} className="flex gap-5 w-full">
                 <Image
                   className="w-[7.5rem] aspect-square"
-                  src={item.image_paths[0]}
+                  src={item.product.image_paths[0]}
                   alt={item.id}
                 />
                 <div className="w-full flex flex-col justify-between pb-2">
                   <div>
-                    <h3 className="text-lg">{item.name}</h3>
+                    <h3 className="text-lg">{item.product.name}</h3>
                     <p className="mt-1 text-gray-500 text-sm">
-                      {item.category.name}
+                      {item.product.category.name}
                     </p>
                   </div>
 
                   <div className="flex justify-between font-semibold">
-                    <h3>$ {item.price}</h3>
+                    <h3>$ {item.product.price}</h3>
                     <h3>x {item.count}</h3>
                   </div>
                 </div>
@@ -47,7 +47,7 @@ const CartPage = () => {
               <h3>
                 ${" "}
                 {cart.reduce(
-                  (state, item) => state + item.price * item.count,
+                  (state, item) => state + item.product.price * item.count,
                   0
                 )}
               </h3>
@@ -61,7 +61,7 @@ const CartPage = () => {
               <h3 className="font-bold">
                 ${" "}
                 {cart.reduce(
-                  (state, item) => state + item.price * item.count,
+                  (state, item) => state + item.product.price * item.count,
                   0
                 ) + fees}
               </h3>

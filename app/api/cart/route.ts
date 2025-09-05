@@ -3,7 +3,7 @@ import { getTokenizedClient } from "@/lib/utils";
 
 export async function GET(request: Request) {
   const supabase = await getTokenizedClient(request);
-  const { data: userData, error: userError } = await supabase.auth.getUser();
+  const { error: userError } = await supabase.auth.getUser();
 
   if (userError)
     return Response.json(

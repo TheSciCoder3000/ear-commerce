@@ -6,7 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavbarProfile from "./NavbarProfile";
 import { useAppDispatch, useTotalCart } from "@/store/hooks";
-import { useDispatch } from "react-redux";
 import { fetchCart } from "@/store/cart/CartAsyncThunk";
 import { createClient } from "@/lib/supabase/client";
 
@@ -30,6 +29,7 @@ const Navbar = () => {
 
   useEffect(() => {
     fetCartData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

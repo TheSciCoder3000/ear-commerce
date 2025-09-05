@@ -3,7 +3,6 @@
 import CategoryFilter from "@/components/CategoryFilter";
 import PriceRangeSelector from "@/components/PriceRangeSelector";
 import ProductItem from "@/components/ProductItem";
-import { ProductData } from "@/Constants";
 import { store } from "@/store";
 import React, { use, useEffect, useState } from "react";
 import { Provider } from "react-redux";

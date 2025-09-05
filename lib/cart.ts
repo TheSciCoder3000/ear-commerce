@@ -1,7 +1,8 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { GetUser } from "./usert";
+import { ParseProductPaths } from "./products/fetch";
 
-const FetchQuery = "id, count, product ( * )";
+const FetchQuery = "id, count, product ( *, category ( * ) )";
 type FetchCartQuery = typeof FetchQuery;
 
 export async function GetCartItems(supabase: SupabaseClient) {
@@ -13,6 +14,11 @@ export async function GetCartItems(supabase: SupabaseClient) {
     .eq("user_id", user.id);
 
   if (error) throw Error("error in fetching user cart");
+
+  for (let i = 0; i < data.length; i++) {
+    const product = data[i].product;
+    data[i].product = await ParseProductPaths(product);
+  }
 
   return data;
 }

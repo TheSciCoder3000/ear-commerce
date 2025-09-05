@@ -56,24 +56,38 @@ export async function FetchProductByIds(
   return data;
 }
 
-export async function ParseProductTable(data: SupabaseProductTable[]) {
-  const supabase = createClient();
+/**
+ * converts the image_paths relative url and returns the
+ * public url of each image path. The data object array
+ * must contain a property image_paths of type string[]
+ * @param data
+ */
+export async function ParseProductTable<T extends { image_paths: string[] }>(
+  data: T[]
+): Promise<T[]> {
+  const parsed: T[] = [];
 
-  const parsed: SupabaseProductTable[] = [];
   for (let t = 0; t < data.length; t++) {
-    const { image_paths } = data[t];
-    const urls: string[] = [];
-    for (let i = 0; i < image_paths.length; i++) {
-      const { data } = await supabase.storage
-        .from("products")
-        .getPublicUrl(image_paths[i]?.replace("products", ""));
-      urls.push(data.publicUrl);
-    }
+    const parsedPaths = await ParseProductPaths(data[t]);
 
-    parsed.push({
-      ...data[t],
-      image_paths: urls,
-    });
+    parsed.push(parsedPaths);
   }
+
   return parsed;
+}
+
+export async function ParseProductPaths<T extends { image_paths: string[] }>(
+  data: T
+): Promise<T> {
+  const supabase = createClient();
+  const { image_paths } = data;
+  const urls: string[] = [];
+  for (let i = 0; i < image_paths.length; i++) {
+    const { data } = await supabase.storage
+      .from("products")
+      .getPublicUrl(image_paths[i]?.replace("products", ""));
+    urls.push(data.publicUrl);
+  }
+
+  return { ...data, image_paths: urls };
 }

@@ -17,26 +17,7 @@ const CartPage = () => {
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="flex-1 flex flex-col gap-5">
             {cart.map((item) => (
-              <div key={item.id} className="flex gap-5 w-full">
-                <Image
-                  className="w-[7.5rem] aspect-square"
-                  src={item.product.image_paths[0]}
-                  alt={item.id}
-                />
-                <div className="w-full flex flex-col justify-between pb-2">
-                  <div>
-                    <h3 className="text-lg">{item.product.name}</h3>
-                    <p className="mt-1 text-gray-500 text-sm">
-                      {item.product.category.name}
-                    </p>
-                  </div>
-
-                  <div className="flex justify-between font-semibold">
-                    <h3>$ {item.product.price}</h3>
-                    <h3>x {item.count}</h3>
-                  </div>
-                </div>
-              </div>
+              <CartItem key={item.id} item={item} />
             ))}
           </div>
 
@@ -67,6 +48,35 @@ const CartPage = () => {
               </h3>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface CartItemProps {
+  item: ICartResponse;
+}
+const CartItem: React.FC<CartItemProps> = ({ item }) => {
+  console.log(item);
+  return (
+    <div key={item.id} className="flex gap-5 w-full">
+      <Image
+        className="w-[7.5rem] aspect-square"
+        src={item.product.image_paths[0]}
+        alt={item.id}
+      />
+      <div className="w-full flex flex-col justify-between pb-2">
+        <div>
+          <h3 className="text-lg">{item.product.name}</h3>
+          <p className="mt-1 text-gray-500 text-sm">
+            {item.product.category.name}
+          </p>
+        </div>
+
+        <div className="flex justify-between font-semibold">
+          <h3>$ {item.product.price}</h3>
+          <h3>x {item.count}</h3>
         </div>
       </div>
     </div>

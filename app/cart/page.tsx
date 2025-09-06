@@ -3,15 +3,18 @@
 import Image from "@/components/Image";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { emptyCart } from "@/store/cart/cartSlice";
 import { useCart } from "@/store/hooks";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const CartPage = () => {
   const cart = useCart();
   const fees = 1;
   const [loading, setloading] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleCheckout = async () => {
     setloading(true);
@@ -28,16 +31,14 @@ const CartPage = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        items: cart,
+        cart,
       }),
     });
-    if (res.status !== 200) {
-      const { message } = (await res.json()) as { message: string };
-      console.log(message);
-      return;
+
+    if (res.status == 200) {
+      dispatch(emptyCart());
+      router.push("/user/order");
     }
-    const { url } = (await res.json()) as IcheckoutResponse;
-    router.push(url);
   };
 
   return (

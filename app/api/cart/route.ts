@@ -1,4 +1,4 @@
-import { DeleteCartItem, GetCartItems, InsertCartItem } from "@/lib/cart";
+import { RemoveCartItem, GetCartItems, InsertCartItem } from "@/lib/cart";
 import { getTokenizedClient } from "@/lib/utils";
 
 export async function GET(request: Request) {
@@ -55,7 +55,7 @@ export async function DELETE(request: Request) {
       product_id: product.id,
       count: value,
     };
-    const data = await DeleteCartItem(supabase, cartData);
+    const data = await RemoveCartItem(supabase, cartData);
 
     if (data)
       return Response.json({ method: "decrement", data }, { status: 200 });

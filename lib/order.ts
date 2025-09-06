@@ -42,10 +42,10 @@ export async function CreateOrder(
   return await GetFullOrder(supabase, orderData.id);
 }
 
-export async function GetFullOrder(supabase: SupabaseClient, order_id: string) {
-  const FetchQuery = "*, order_item (*, product (*))";
-  type FetchType = typeof FetchQuery;
+const FetchQuery = "*, order_item (*, product (*))";
+type FetchType = typeof FetchQuery;
 
+export async function GetFullOrder(supabase: SupabaseClient, order_id: string) {
   const { data, error } = await supabase
     .from("orders")
     .select<FetchType, IDbFullOrder>(FetchQuery)
@@ -57,8 +57,42 @@ export async function GetFullOrder(supabase: SupabaseClient, order_id: string) {
   return data;
 }
 
+export async function GetAllOrders(supabase: SupabaseClient) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select<`*`, IDbOrder>("*");
+  if (error) throw Error("Error in fetching user orders");
+
+  return data;
+}
+
 export async function ChangeOrderStatus(
   supabase: SupabaseClient,
   order_id: string,
-  status: OrderStatus
-) {}
+  status: OrderStatus,
+  returnValue: true
+): Promise<IDbFullOrder>;
+export async function ChangeOrderStatus(
+  supabase: SupabaseClient,
+  order_id: string,
+  status: OrderStatus,
+  returnValue?: false | undefined
+): Promise<void | undefined>;
+
+export async function ChangeOrderStatus(
+  supabase: SupabaseClient,
+  order_id: string,
+  status: OrderStatus,
+  returnValue?: boolean
+): Promise<IDbFullOrder | void> {
+  const { data, error } = await supabase
+    .from("orders")
+    .update({ status })
+    .eq("id", order_id)
+    .select<FetchType, IDbFullOrder>()
+    .single();
+
+  if (error) throw Error("Error in updating order");
+
+  if (returnValue) return data;
+}

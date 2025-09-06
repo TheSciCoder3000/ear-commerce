@@ -61,7 +61,7 @@ export async function InsertCartItem(
   return data;
 }
 
-export async function DeleteCartItem(
+export async function RemoveCartItem(
   supabase: SupabaseClient,
   cartData: IDbCart
 ) {
@@ -94,6 +94,14 @@ export async function DeleteCartItem(
 
   if (error) throw Error("error in inserting cart data");
   return null;
+}
+
+export async function DeleteCartItem(
+  supabase: SupabaseClient,
+  cartIds: string[]
+) {
+  const { error } = await supabase.from("cart").delete().eq("id", cartIds);
+  if (error) throw Error("Error in deleting cart items");
 }
 
 export async function ProcessCartCheckout(session: Stripe.Checkout.Session) {

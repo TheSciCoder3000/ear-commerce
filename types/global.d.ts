@@ -49,6 +49,7 @@ interface IDbOrderCreation {
 
 interface IDbOrder extends IDbOrderCreation {
   id: string;
+  created_at: string;
 }
 
 interface IDbFullOrder extends IDbOrder {

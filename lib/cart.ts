@@ -1,9 +1,8 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { GetUser } from "./usert";
 import { ParseProductPaths } from "./products/fetch";
 import Stripe from "stripe";
-import { createClient } from "./supabase/server";
-
+import { ChangeOrderStatus } from "./order";
 const FetchQuery = "id, count, product ( *, category ( * ) )";
 type FetchCartQuery = typeof FetchQuery;
 
@@ -24,8 +23,6 @@ export async function GetCartItems(supabase: SupabaseClient) {
 
   return data;
 }
-
-export async function GetCartByIds(supabase: SupabaseClient, ids: string[]) {}
 
 export async function InsertCartItem(
   supabase: SupabaseClient,
@@ -101,10 +98,16 @@ export async function DeleteCartItem(
 
 export async function ProcessCartCheckout(session: Stripe.Checkout.Session) {
   const rawMetadata = session.metadata;
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
   if (!rawMetadata) throw Error("Error: No metadata found in payment");
 
-  const { cartIds } = (await JSON.parse(
+  const { order_id } = (await JSON.parse(
     rawMetadata.data
   )) as WebhookParsedMetadata;
+
+  await ChangeOrderStatus(supabaseAdmin, order_id, "success");
 }

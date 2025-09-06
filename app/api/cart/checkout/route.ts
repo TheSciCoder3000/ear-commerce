@@ -1,3 +1,5 @@
+import { CreateOrder } from "@/lib/order";
+import { getTokenizedClient } from "@/lib/utils";
 import Stripe from "stripe";
 
 export async function POST(request: Request) {
@@ -9,11 +11,32 @@ export async function POST(request: Request) {
   if (!serverUrl)
     return Response.json({ message: "no server url" }, { status: 404 });
 
-  try {
-    const { items } = (await request.json()) as ICheckoutBody;
-    if (!items || items.length < 1)
-      return Response.json({ message: "empty cart items" }, { status: 500 });
+  const { items } = (await request.json()) as ICheckoutBody;
+  if (!items || items.length < 1)
+    return Response.json({ message: "empty cart items" }, { status: 500 });
 
+  let order: IDbFullOrder;
+  try {
+    const supabase = getTokenizedClient(request);
+    order = await CreateOrder(supabase, items);
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message);
+      return Response.json(
+        {
+          message: `Error in checkout create order: ${e.message}`,
+        },
+        { status: 500 }
+      );
+    }
+
+    return Response.json(
+      { message: "unknown Error in create order" },
+      { status: 500 }
+    );
+  }
+
+  try {
     const stripe = new Stripe(apiKey);
 
     const session = await stripe.checkout.sessions.create({
@@ -35,7 +58,7 @@ export async function POST(request: Request) {
       cancel_url: `${serverUrl}/`,
       metadata: {
         data: JSON.stringify({
-          cartIds: items.map((item) => item.id),
+          order_id: order.id,
         } as WebhookParsedMetadata),
       },
     });

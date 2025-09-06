@@ -36,5 +36,36 @@ interface IcheckoutResponse {
 }
 
 interface WebhookParsedMetadata {
-  cartIds: string[];
+  order_id: string;
+}
+
+// ===================== ORDERS AND ORDER ITEMS =====================
+
+type OrderStatus = "processing" | "success";
+interface IDbOrderCreation {
+  user_id: string;
+  status: OrderStatus;
+}
+
+interface IDbOrder extends IDbOrderCreation {
+  id: string;
+}
+
+interface IDbFullOrder extends IDbOrder {
+  order_item: IDbOrderItemFull[];
+}
+
+interface IDbOrderItemCreation {
+  order_id: string;
+  user_id: string;
+  product_id: string;
+  count: number;
+}
+
+interface IDBOrderItem extends IDbOrderItemCreation {
+  id: string;
+}
+
+interface IDbOrderItemFull extends IDBOrderItem {
+  product: IProduct;
 }

@@ -2,6 +2,7 @@
 
 import Image from "@/components/Image";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 import { useCart } from "@/store/hooks";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -14,11 +15,17 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     setloading(true);
+    const token = await createClient()
+      .auth.getSession()
+      .then((res) => res.data.session?.access_token);
+
+    if (!token) throw Error("invalid token");
 
     const res = await fetch("/api/cart/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         items: cart,

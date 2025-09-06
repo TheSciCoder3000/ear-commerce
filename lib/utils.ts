@@ -6,10 +6,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getTokenizedClient(request: Request) {
+export function getToken(request: Request) {
   const authHeader = request.headers.get("authorization");
   if (!authHeader || authHeader === "") throw Error("unauthorized");
   const token = authHeader?.replace("Bearer ", "");
+  return token as string;
+}
+
+export function getTokenizedClient(request: Request) {
+  const token = getToken(request);
 
   return createClient(token);
 }

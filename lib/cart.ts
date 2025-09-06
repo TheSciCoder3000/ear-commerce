@@ -1,6 +1,8 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { GetUser } from "./usert";
 import { ParseProductPaths } from "./products/fetch";
+import Stripe from "stripe";
+import { createClient } from "./supabase/server";
 
 const FetchQuery = "id, count, product ( *, category ( * ) )";
 type FetchCartQuery = typeof FetchQuery;
@@ -22,6 +24,8 @@ export async function GetCartItems(supabase: SupabaseClient) {
 
   return data;
 }
+
+export async function GetCartByIds(supabase: SupabaseClient, ids: string[]) {}
 
 export async function InsertCartItem(
   supabase: SupabaseClient,
@@ -93,4 +97,14 @@ export async function DeleteCartItem(
 
   if (error) throw Error("error in inserting cart data");
   return null;
+}
+
+export async function ProcessCartCheckout(session: Stripe.Checkout.Session) {
+  const rawMetadata = session.metadata;
+
+  if (!rawMetadata) throw Error("Error: No metadata found in payment");
+
+  const { cartIds } = (await JSON.parse(
+    rawMetadata.data
+  )) as WebhookParsedMetadata;
 }

@@ -26,3 +26,15 @@ interface ICartResponse {
   count: number;
   product: IProduct;
 }
+
+interface ICheckoutBody {
+  items?: ICartResponse[];
+}
+
+interface IcheckoutResponse {
+  url: string;
+}
+
+interface WebhookParsedMetadata {
+  cartIds: string[];
+}

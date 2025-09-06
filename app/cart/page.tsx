@@ -1,12 +1,37 @@
 "use client";
 
 import Image from "@/components/Image";
+import { Button } from "@/components/ui/button";
 import { useCart } from "@/store/hooks";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const CartPage = () => {
   const cart = useCart();
   const fees = 1;
+  const [loading, setloading] = useState(false);
+  const router = useRouter();
+
+  const handleCheckout = async () => {
+    setloading(true);
+
+    const res = await fetch("/api/cart/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        items: cart,
+      }),
+    });
+    if (res.status !== 200) {
+      const { message } = (await res.json()) as { message: string };
+      console.log(message);
+      return;
+    }
+    const { url } = (await res.json()) as IcheckoutResponse;
+    router.push(url);
+  };
 
   return (
     <div className="mt-30 mb-20 min-h-[70vh]">
@@ -23,7 +48,7 @@ const CartPage = () => {
 
           <div className="p-5 w-full lg:w-[20rem] rounded-xl shadow-md h-full">
             <h2 className="text-xl mb-5">Summary</h2>
-            <div className="grid grid-cols-3 text-gray-500 gap-y-2">
+            <div className="grid grid-cols-3 text-gray-500 gap-y-2 mb-10">
               <h3 className="col-span-2">Sub Total:</h3>
               <h3>
                 ${" "}
@@ -47,6 +72,13 @@ const CartPage = () => {
                 ) + fees}
               </h3>
             </div>
+            <Button
+              disabled={loading}
+              className="w-full hover:bg-black/75 cursor-pointer disabled:cursor-not-allowed disabled:bg-black/60"
+              onClick={() => handleCheckout()}
+            >
+              Checkout
+            </Button>
           </div>
         </div>
       </div>

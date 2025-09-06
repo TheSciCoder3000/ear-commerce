@@ -59,7 +59,7 @@ const Navbar = () => {
           >
             Products
           </Link>
-          <Link
+          {/* <Link
             className={`${
               pathname === "/deals" ? "text-gray-800" : "text-gray-400"
             }`}
@@ -74,7 +74,7 @@ const Navbar = () => {
             href={"/support"}
           >
             Support
-          </Link>
+          </Link> */}
         </div>
 
         <div className="flex items-center gap-5">
@@ -193,7 +193,7 @@ const Navbar = () => {
           >
             Products
           </Link>
-          <Link
+          {/* <Link
             onClick={() => setToggleBurger(false)}
             className={`${
               pathname === "/deals" ? "text-gray-800" : "text-gray-400"
@@ -210,7 +210,7 @@ const Navbar = () => {
             href={"/support"}
           >
             Support
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

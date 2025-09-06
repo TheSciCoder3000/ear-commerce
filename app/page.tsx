@@ -38,9 +38,12 @@ export default async function Home() {
             >
               Shop Now
             </Link>
-            <button className="px-8 py-4 rounded-sm bg-white text-[#2563EB]">
+            <a
+              href={"#featured-section"}
+              className="px-8 py-4 rounded-sm bg-white text-[#2563EB]"
+            >
               View Featured
-            </button>
+            </a>
           </div>
         </div>
         <div className="flex-1 relative">
@@ -56,7 +59,7 @@ export default async function Home() {
       </div>
 
       {/* Featured Products */}
-      <div className="px-5 py-20">
+      <div id="featured-section" className="px-5 py-20">
         <h1 className="font-bold text-3xl text-center mb-5">
           Featured Products
         </h1>
@@ -69,9 +72,12 @@ export default async function Home() {
             <ProductItem key={prod.id} prod={prod} isCategory={false} />
           ))}
         </div>
-        <button className="block px-5 py-2 rounded-md bg-blue-600 text-white mx-auto">
+        <Link
+          href={"/products"}
+          className="block px-5 py-2 rounded-md bg-blue-600 hover:bg-blue-600/80 cursor-pointer w-fit text-white mx-auto"
+        >
           View All Products
-        </button>
+        </Link>
       </div>
 
       {/* Browse by Category */}

@@ -100,7 +100,7 @@ export async function DeleteCartItem(
   supabase: SupabaseClient,
   cartIds: string[]
 ) {
-  const { error } = await supabase.from("cart").delete().eq("id", cartIds);
+  const { error } = await supabase.from("cart").delete().in("id", cartIds);
   if (error) throw Error(`Error in deleting cart items: ${cartIds}`);
 }
 

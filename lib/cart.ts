@@ -101,7 +101,7 @@ export async function DeleteCartItem(
   cartIds: string[]
 ) {
   const { error } = await supabase.from("cart").delete().eq("id", cartIds);
-  if (error) throw Error("Error in deleting cart items");
+  if (error) throw Error(`Error in deleting cart items: ${cartIds}`);
 }
 
 export async function ProcessCartCheckout(session: Stripe.Checkout.Session) {

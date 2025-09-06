@@ -60,7 +60,8 @@ export async function GetFullOrder(supabase: SupabaseClient, order_id: string) {
 export async function GetAllOrders(supabase: SupabaseClient) {
   const { data, error } = await supabase
     .from("orders")
-    .select<`*`, IDbOrder>("*");
+    .select<`*`, IDbOrder>("*")
+    .order("created_at", { ascending: false });
   if (error) throw Error("Error in fetching user orders");
 
   return data;

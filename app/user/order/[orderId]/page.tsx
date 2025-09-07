@@ -31,7 +31,7 @@ async function OrderDetailPage({ params }: PageProps<"/user/order/[orderId]">) {
         </div>
       </div>
 
-      <div className="mt-20">
+      <div className="mt-20 flex flex-col gap-5">
         {products.map((item) => (
           <ProductItem
             key={item.id}
@@ -52,7 +52,11 @@ interface ProductItemProps {
   category: string;
   count: number;
 }
-const ProductItem: React.FC<ProductItemProps> = ({ product, category }) => {
+const ProductItem: React.FC<ProductItemProps> = ({
+  product,
+  category,
+  count,
+}) => {
   return (
     <div className="flex gap-5 w-full">
       <div className="w-30 aspect-square">
@@ -70,7 +74,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product, category }) => {
         </div>
         <div className="flex justify-between">
           <h2 className="text-lg">$ {product.price}</h2>
-          <h2 className="text-lg">x {product.price}</h2>
+          <h2 className="text-sm">x {count}</h2>
         </div>
       </div>
     </div>

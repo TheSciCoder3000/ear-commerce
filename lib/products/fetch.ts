@@ -46,12 +46,32 @@ export async function FetchUserProducts(
 }
 
 export async function FetchProductByIds(
-  ids: string[]
-): Promise<SupabaseProductTable[] | null> {
-  const supabase = createClient();
+  ids: string[],
+  withCategory: true
+): Promise<IProduct[]>;
+export async function FetchProductByIds(
+  ids: string[],
+  withCategory?: false | undefined
+): Promise<SupabaseProductTable[]>;
 
-  const { data, error } = await supabase
-    .from("product")
+export async function FetchProductByIds(
+  ids: string[],
+  withCategory = false
+): Promise<SupabaseProductTable[] | IProduct[]> {
+  const supabase = createClient();
+  const table = supabase.from("product");
+
+  if (withCategory) {
+    const { data: altData, error: altError } = await table
+      .select<`*, category (*)`, IProduct>("*, category (*)")
+      .in("id", ids);
+
+    if (altError) throw Error(altError.message);
+
+    return altData;
+  }
+
+  const { data, error } = await table
     .select<`*`, SupabaseProductTable>("*")
     .in("id", ids);
 

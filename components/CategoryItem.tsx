@@ -14,7 +14,7 @@ const CategoryItem: React.FC<ProductProps> = ({ cat }) => {
     <div key={cat.id} className="rounded-md drop-shadow-md flex flex-col">
       <div className="relative bg-gray-400 h-[18rem] overflow-hidden rounded-t-lg">
         <Image
-          src={cat.cover}
+          src={cat.cover || ""}
           alt="item-cover"
           height={0}
           width={0}

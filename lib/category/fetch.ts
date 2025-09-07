@@ -10,3 +10,15 @@ export async function FetchCategories(): Promise<
 
   return [data as CategoryData[], error];
 }
+
+export async function FetchNotNullCategories() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("category")
+    .select<`*`, CategoryData>()
+    .neq("cover", null);
+
+  if (error) throw Error(error.message);
+
+  return data;
+}

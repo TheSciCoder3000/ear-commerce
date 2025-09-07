@@ -1,6 +1,7 @@
 import { ParseFormData, UploadImages } from "@/lib/products/add";
 import { FetchProducts, ParseProductTable } from "@/lib/products/fetch";
 import { createClient } from "@/lib/supabase/client";
+import { revalidatePath } from "next/cache";
 
 interface SupabaseProductTable {
   id?: string;
@@ -45,6 +46,8 @@ export async function POST(request: Request) {
     };
 
     const { error } = await supabase.from("product").insert(InsertData);
+
+    revalidatePath("/");
 
     if (error) {
       console.error(error);

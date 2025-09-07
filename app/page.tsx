@@ -1,19 +1,20 @@
 import CategoryItem from "@/components/CategoryItem";
 import ProductItem from "@/components/ProductItem";
-import { FetchCategories } from "@/lib/category/fetch";
+import { FetchNotNullCategories } from "@/lib/category/fetch";
 import { FetchProducts, ParseProductTable } from "@/lib/products/fetch";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function Home() {
-  const products = (await FetchProducts()
+  const products = (await FetchProducts(4)
     .then(([data, error]) => {
       if (error || !data) throw Error();
       return data;
     })
     .then(ParseProductTable)) as IProduct[];
-  const [categories, categoriesError] = await FetchCategories();
-  if (categoriesError || !categories) throw Error();
+  const categories = await FetchNotNullCategories();
+
   return (
     <div className="mt-17">
       {/* Hero Section */}
@@ -68,9 +69,11 @@ export default async function Home() {
         </p>
 
         <div className="grid mt-15 gap-8 max-w-[20rem] mx-auto sm:grid-cols-2 sm:max-w-[40rem] lg:grid-cols-4 lg:max-w-[80rem] mb-20">
-          {products.map((prod) => (
-            <ProductItem key={prod.id} prod={prod} isCategory={false} />
-          ))}
+          <Suspense>
+            {products.map((prod) => (
+              <ProductItem key={prod.id} prod={prod} isCategory={false} />
+            ))}
+          </Suspense>
         </div>
         <Link
           href={"/products"}

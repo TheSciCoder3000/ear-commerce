@@ -12,16 +12,20 @@ export interface SupabaseProductTable {
   image_paths: string[];
 }
 
-export async function FetchProducts(): Promise<
-  [SupabaseProductTable[] | null, PostgrestError | null]
-> {
+export async function FetchProducts(
+  no_items?: number
+): Promise<[SupabaseProductTable[] | null, PostgrestError | null]> {
   const supabase = createClient();
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("product")
     .select<`*, category (id, name, description)`, SupabaseProductTable>(
       `*, category (id, name, description)`
     );
+
+  if (no_items) query = query.range(0, no_items - 1);
+
+  const { data, error } = await query;
 
   return [data, error];
 }

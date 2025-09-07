@@ -8,7 +8,7 @@ const AdminLayout = ({
 }>) => {
   return (
     <div className="bg-gray-50/50">
-      <div className="min-h-[100vh] max-w-[80rem] mx-auto flex flex-col lg:flex-row gap-10 mt-20 py-10">
+      <div className="min-h-[100vh] max-w-[80rem] mx-auto flex flex-col lg:flex-row gap-10 mt-20 py-10 px-5">
         <UserNavbar />
         {children}
       </div>

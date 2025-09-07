@@ -5,15 +5,15 @@ import React, { useEffect, useState } from "react";
 
 interface NumberPickerProps {
   onValueChange?: (value: number) => void;
-  onIncrement?: (value: number) => void;
   onDecrement?: (value: number) => void;
+  onIncrement?: (value: number) => void;
   defaultValue?: number;
   status: "idle" | "pending" | "success" | "failed";
 }
 const NumebrPicker: React.FC<NumberPickerProps> = ({
   onValueChange,
-  onIncrement,
   onDecrement,
+  onIncrement,
   defaultValue,
   status,
 }) => {
@@ -21,18 +21,18 @@ const NumebrPicker: React.FC<NumberPickerProps> = ({
 
   useEffect(() => {
     if (onValueChange) onValueChange(value);
-  }, [value, onValueChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   const handleDecrement = () => {
-    if (onDecrement) onDecrement(value - 1);
+    const newValue = value === 0 ? 0 : value - 1;
 
-    if (value === 0) setvalue(0);
-    else setvalue((state) => state - 1);
+    if (onDecrement) onDecrement(newValue);
+    setvalue(newValue);
   };
 
   const handleIncrement = () => {
     if (onIncrement) onIncrement(value + 1);
-
     setvalue((state) => state + 1);
   };
 

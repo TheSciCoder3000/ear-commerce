@@ -1,14 +1,15 @@
+import { Route } from "next";
 import Link from "next/link";
 import React from "react";
 
-const links = [
+const links: { label: string; href: Route }[] = [
   {
     label: "Products",
     href: "/user/products",
   },
   {
     label: "Orders",
-    href: "/user/orders",
+    href: "/user/order",
   },
 ];
 

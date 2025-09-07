@@ -51,7 +51,7 @@ const NavbarProfile = () => {
           <Link
             onClick={() => setShowMenu(false)}
             className="w-45 px-5 py-2 text-xs hover:bg-gray-50"
-            href={"/user/address"}
+            href={"/"}
           >
             Addresses
           </Link>

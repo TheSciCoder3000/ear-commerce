@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { Route } from "next";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState<IDbOrder[]>([]);
@@ -50,6 +51,9 @@ const OrderItemComponent: React.FC<OrderItemProps> = ({ order }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   const handlePayment = async (orderId: string) => {
     setLoading(true);
     const token = await createClient()
@@ -71,12 +75,28 @@ const OrderItemComponent: React.FC<OrderItemProps> = ({ order }) => {
 
     if (res.status == 200) {
       const { url } = (await res.json()) as IcheckoutResponse;
-      router.push(url);
+      router.push(url as Route);
+    }
+  };
+
+  const handleItemClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (buttonRef.current && buttonRef.current.contains(e.target as Node))
+      return;
+
+    if (
+      containerRef.current &&
+      containerRef.current.contains(e.target as Node)
+    ) {
+      router.push(`/user/order/${order.id}` as Route);
     }
   };
 
   return (
-    <div key={order.id} className="px-6 py-10 shadow-md w-full">
+    <div
+      onClick={handleItemClick}
+      ref={containerRef}
+      className="px-6 py-10 shadow-md w-full cursor-pointer"
+    >
       <div>
         <h1 className="text-gray-500">
           <span className="font-semibold text-black">Order:</span> {order.id}
@@ -89,6 +109,7 @@ const OrderItemComponent: React.FC<OrderItemProps> = ({ order }) => {
 
       {order.status === "processing" && (
         <Button
+          ref={buttonRef}
           disabled={loading}
           onClick={() => handlePayment(order.id)}
           className="cursor-pointer hover:bg-black/70 mt-10"
